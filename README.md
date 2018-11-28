@@ -45,7 +45,7 @@ bootstrap();
 
 ```typescript jsx
 import * as React from 'react';
-import { nestRPC } from 'electron-nest-rpc';
+import { nestRPC, RPCException } from 'electron-nest-rpc';
 import { UserService } from './services/UserService';
 
 export class TestPage extends React.Component<any> {
@@ -57,8 +57,12 @@ export class TestPage extends React.Component<any> {
     }
     
     async componentDidMount() {
-        const users = await this.userService.getUsers();
-        this.setState({users});
+        try {
+            const users = await this.userService.getUsers();
+            this.setState({users});
+        } catch (e: RPCException) {
+            console.log(e.message);
+        }
     }
     
     render() {

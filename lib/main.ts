@@ -12,9 +12,13 @@ export class NestRPC {
                 cache[cls] = instance;
             }
 
-            NestRPC.handleParams(params, e, evt.callbacks);
-            const data = await instance[method].apply(instance, ...params);
-            e.sender.send(evt.event, data);
+            try {
+                NestRPC.handleParams(params, e, evt.callbacks);
+                const data = await instance[method].apply(instance, ...params);
+                e.sender.send(evt.event, null, data);
+            } catch (e) {
+                e.sender.send(evt.event, e.message || 'Unknown Exception', null);
+            }
         })
     }
 

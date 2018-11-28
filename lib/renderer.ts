@@ -2,6 +2,7 @@ import { ipcRenderer } from 'electron';
 import { Type } from "@nestjs/common";
 import * as uuid from 'uuid/v1';
 import { NEST_RPC_CALLBACK_EVENT, NEST_RPC_INVOKE_EVENT, NEST_RPC_INVOKE_RESPONSE_EVENT } from "./constants";
+import { RPCException } from "./RPCException";
 
 
 export const nestRPC = <T = any>(cls: Type<T>): T => {
@@ -27,8 +28,10 @@ export const nestRPC = <T = any>(cls: Type<T>): T => {
                     callbacks: result.callbackEvents
                 }, ...result.parameters);
 
-                return new Promise(resolve => {
-                    ipcRenderer.once(event, (e, ...params) => resolve(...params));
+                return new Promise((resolve, reject) => {
+                    ipcRenderer.once(event, (e, msg, ...params) => {
+                        msg ? reject(new RPCException(msg)) : resolve(...params);
+                    });
                 });
             }
         })
