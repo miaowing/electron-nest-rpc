@@ -1,4 +1,4 @@
-import ipcMain = Electron.ipcMain;
+import { ipcMain } from 'electron';
 import { INestApplicationContext } from "@nestjs/common";
 import { NEST_RPC_INVOKE_EVENT } from "./constants";
 
