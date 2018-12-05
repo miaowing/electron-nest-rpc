@@ -13,7 +13,7 @@ export class NestRPC {
             }
 
             try {
-                NestRPC.handleParams(params, e, evt.callbacks);
+                params = NestRPC.handleParams(params, e, evt.callbacks);
                 const data = await instance[method].apply(instance, ...params);
                 e.sender.send(evt.event, null, data);
             } catch (err) {
@@ -23,7 +23,6 @@ export class NestRPC {
     }
 
     private static handleParams(params: any[], e, callbacks) {
-        const callbackEvents = [];
         const parameters = params.map((param, index) => {
             if (param.type === 'function') {
                 const evt = callbacks.filter(cb => cb.index === index)[0];
@@ -39,6 +38,6 @@ export class NestRPC {
             }
         });
 
-        return { callbackEvents, parameters };
+        return parameters;
     }
 }
