@@ -16,8 +16,8 @@ export class NestRPC {
                 NestRPC.handleParams(params, e, evt.callbacks);
                 const data = await instance[method].apply(instance, ...params);
                 e.sender.send(evt.event, null, data);
-            } catch (e) {
-                e.sender.send(evt.event, e.message || 'Unknown Exception', null);
+            } catch (err) {
+                e.sender.send(evt.event, err.message || 'Unknown Exception', null);
             }
         })
     }
