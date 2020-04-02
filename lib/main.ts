@@ -14,6 +14,9 @@ export class NestRPC {
 
             try {
                 params = NestRPC.handleParams(params, e, evt.callbacks);
+                if (!instance[method]) {
+                    throw new Error(`No ${method} function found in ${instance.constructor.name}`);
+                }
                 const data = await instance[method].apply(instance, params);
                 e.sender.send(evt.event, null, data);
             } catch (err) {
