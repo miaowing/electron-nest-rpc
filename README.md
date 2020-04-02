@@ -8,6 +8,10 @@ The electron-nest-rpc module provides a simple way to invoke nest service betwee
 $ npm i --save electron-nest-rpc
 ```
 
+## Examples
+
+https://github.com/miaowing/electron-nest-rpc-example
+
 ## Quick Start
 
 #### Main Process
@@ -28,7 +32,7 @@ async function bootstrap() {
         minHeight: 647,
         titleBarStyle: 'hidden',
     });
-    const nestContext = await NestFactory.create(ApplicationModule);
+    const nestContext = await NestFactory.createApplicationContext(ApplicationModule);
     NestRPC.register(nestContext);
     
     window.loadURL(formatUrl({
