@@ -1,14 +1,16 @@
 import { ipcRenderer } from 'electron';
 import { Type } from '@nestjs/common';
-import * as uuid from 'uuid/v1';
+import { v1 } from 'uuid';
 import { NEST_RPC_CALLBACK_EVENT, NEST_RPC_INVOKE_EVENT, NEST_RPC_INVOKE_RESPONSE_EVENT } from './constants';
 import { RPCException } from './RPCException';
 
 
 export const nestRPC = <T = any>(cls: Type<T>): T => {
   let replaced = false;
-  for (const key in cls.prototype) {
-    const method = key;
+  for (const method in cls.prototype) {
+    if (!cls.prototype.hasOwnProperty(method)) {
+      continue;
+    }
     defineProperty(cls, method);
     replaced = true;
   }
@@ -16,6 +18,9 @@ export const nestRPC = <T = any>(cls: Type<T>): T => {
   if (!replaced) {
     const properties = Object.getOwnPropertyNames(cls.prototype);
     for (const key in properties) {
+      if (!properties.hasOwnProperty(key)) {
+        continue;
+      }
       const method = properties[key];
       defineProperty(cls, method);
     }
@@ -28,7 +33,7 @@ function defineProperty(cls, method) {
   Object.defineProperty(cls.prototype, method, {
     value: async (...params) => {
       const result = handleParams(cls, method, params);
-      const event = `${NEST_RPC_INVOKE_RESPONSE_EVENT}__${cls.name}__${method}__${uuid()}`;
+      const event = `${NEST_RPC_INVOKE_RESPONSE_EVENT}__${cls.name}__${method}__${v1()}`;
 
       result.callbackEvents.forEach(item => {
         ipcRenderer.once(item.event, (e, ...data) => {
@@ -57,7 +62,7 @@ function handleParams(cls, method, params: any[]) {
   const callbackEvents = [];
   const parameters = params.map((param, index) => {
     if (typeof param === 'function') {
-      const event = `${NEST_RPC_CALLBACK_EVENT}__${cls.name}__${method}__${index}__${uuid()}`;
+      const event = `${NEST_RPC_CALLBACK_EVENT}__${cls.name}__${method}__${index}__${v1()}`;
       callbackEvents.push({ event, index });
 
       return { type: 'function', value: event };

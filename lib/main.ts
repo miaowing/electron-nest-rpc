@@ -26,7 +26,7 @@ export class NestRPC {
   }
 
   private static handleParams(params: any[], e, callbacks) {
-    const parameters = params.map((param, index) => {
+    return params.map((param, index) => {
       if (param.type === 'function') {
         const evt = callbacks.filter(cb => cb.index === index)[0];
         if (evt) {
@@ -40,7 +40,5 @@ export class NestRPC {
         return param.value;
       }
     });
-
-    return parameters;
   }
 }
