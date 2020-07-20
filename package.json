@@ -1,6 +1,6 @@
 {
   "name": "electron-nest-rpc",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "The electron-nest-rpc module provides a simple way to invoke nest service between the renderer process (web page) and the main process.",
   "author": "Miaowing <i@zfeng.net>",
   "license": "MIT",
@@ -31,6 +31,7 @@
   "homepage": "https://github.com/miaowing/electron-nest-rpc#readme",
   "dependencies": {
     "loadash": "^1.0.0",
+    "reflect-metadata": "^0.1.13",
     "uuid": "^7.0.3"
   }
 }
