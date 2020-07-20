@@ -11,7 +11,7 @@ export const nestRPC = <T = any>(cls: Type<T>, classname?: string): T => {
     if (!cls.prototype.hasOwnProperty(method)) {
       continue;
     }
-    defineProperty(cls, method);
+    defineProperty(cls, method, classname);
     replaced = true;
   }
 
