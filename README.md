@@ -12,6 +12,8 @@ $ npm i --save electron-nest-rpc
 
 https://github.com/miaowing/electron-nest-rpc-example
 
+https://github.com/miaowing/dolphin
+
 ## Quick Start
 
 #### Main Process
